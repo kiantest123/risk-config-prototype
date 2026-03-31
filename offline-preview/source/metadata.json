@@ -1,0 +1,5 @@
+{
+  "name": "风控配置平台",
+  "description": "风控规则引擎与特征平台熔断降级管理系统",
+  "requestFramePermissions": []
+}

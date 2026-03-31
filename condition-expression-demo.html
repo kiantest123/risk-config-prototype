@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>条件表达式 - 前端样式还原</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f1f5f9; padding: 40px; color: #334155; }
+  .mono { font-family: 'SF Mono', 'Fira Code', 'JetBrains Mono', monospace; letter-spacing: -0.01em; }
+
+  /* ===== 外层容器 ===== */
+  .expr-container {
+    background: linear-gradient(180deg, rgba(248,250,252,0.6) 0%, rgba(241,245,249,0.4) 100%);
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 16px 16px 12px;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.02);
+    max-width: 720px;
+  }
+
+  /* ===== 条件组布局 ===== */
+  .cond-group { display: flex; gap: 0; min-width: 0; }
+
+  /* 左侧轨道 */
+  .cond-rail { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; width: 48px; position: relative; }
+  .cond-rail .rail-line { flex: 1; min-height: 8px; width: 2px; border-radius: 1px; }
+  .cond-rail .rail-line.and { background: #c7d2fe; }
+  .cond-rail .rail-line.or  { background: #fde68a; }
+
+  /* AND/OR 切换徽章 */
+  .logic-toggle { position: relative; z-index: 10; display: inline-flex; border-radius: 999px; overflow: hidden; border: 2px solid #fff; flex-shrink: 0; }
+  .logic-toggle button { padding: 3px 10px; font-size: 10px; font-weight: 700; letter-spacing: 0.04em; border: none; cursor: pointer; transition: all 0.2s; }
+  .logic-toggle .active-and { background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%); color: #fff; }
+  .logic-toggle .inactive     { background: #f8fafc; color: #94a3b8; }
+  .logic-toggle .active-or  { background: linear-gradient(135deg, #d97706 0%, #f59e0b 100%); color: #fff; }
+  .logic-toggle.and { box-shadow: 0 2px 8px rgba(79,70,229,0.2); }
+  .logic-toggle.or  { box-shadow: 0 2px 8px rgba(217,119,6,0.2); }
+
+  /* 只读徽章 */
+  .logic-badge { position: relative; z-index: 10; font-size: 10px; font-weight: 700; letter-spacing: 0.05em; padding: 4px 10px; border-radius: 10px; color: #fff; white-space: nowrap; }
+  .logic-badge.and { background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%); box-shadow: 0 2px 6px rgba(79,70,229,0.3); }
+  .logic-badge.or  { background: linear-gradient(135deg, #d97706 0%, #f59e0b 100%); box-shadow: 0 2px 6px rgba(217,119,6,0.3); }
+
+  /* 右侧子项列表 */
+  .cond-children { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+
+  /* 每行子项 */
+  .cond-row { display: flex; align-items: center; min-width: 0; min-height: 42px; }
+
+  /* 水平分支连线 */
+  .branch-connector { flex-shrink: 0; width: 24px; height: 2px; position: relative; }
+  .branch-connector .line { position: absolute; top: 0; left: 0; right: 0; height: 2px; border-radius: 1px; }
+  .branch-connector .line.and { background: linear-gradient(90deg, #c7d2fe, #818cf8); }
+  .branch-connector .line.or  { background: linear-gradient(90deg, #fde68a, #fbbf24); }
+  .branch-connector .dot { position: absolute; right: -2px; top: -3px; width: 8px; height: 8px; border-radius: 50%; background: #fff; }
+  .branch-connector .dot.and { border: 2px solid #818cf8; }
+  .branch-connector .dot.or  { border: 2px solid #fbbf24; }
+
+  /* 条件行内容区 */
+  .cond-content { flex: 1; min-width: 0; padding: 5px 0; margin-left: 8px; }
+
+  /* ===== 单条件项 ===== */
+  .cond-item {
+    display: flex; align-items: center; gap: 0; border-radius: 8px;
+    background: linear-gradient(135deg, #ffffff 0%, #fafbff 100%);
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+    transition: all 0.2s;
+  }
+  .cond-item:hover {
+    border-color: #a5b4fc;
+    box-shadow: 0 2px 8px rgba(99,102,241,0.1), 0 1px 2px rgba(0,0,0,0.04);
+  }
+
+  /* 字段输入区 */
+  .cond-field { position: relative; display: flex; align-items: center; border-right: 1px solid #f1f5f9; }
+  .cond-field .accent-bar { position: absolute; left: 0; top: 8px; bottom: 8px; width: 3px; border-radius: 0 4px 4px 0; background: linear-gradient(180deg, #818cf8, #6366f1); }
+  .cond-field input {
+    width: 176px; padding: 10px 12px 10px 16px; font-size: 13px;
+    background: transparent; border: none; outline: none; color: #334155;
+  }
+  .cond-field input::placeholder { color: #cbd5e1; }
+
+  /* 运算符选择 */
+  .cond-operator { padding: 0 6px; flex-shrink: 0; border-right: 1px solid #f1f5f9; }
+  .cond-operator select {
+    appearance: none; text-align: center; padding: 6px 10px; font-size: 12px; font-weight: 500;
+    border-radius: 6px; border: none; outline: none; cursor: pointer;
+    background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);
+    color: #4338ca; min-width: 72px;
+  }
+
+  /* 值输入 */
+  .cond-value { flex: 1; min-width: 0; }
+  .cond-value input {
+    width: 100%; padding: 10px 12px; font-size: 13px;
+    background: transparent; border: none; outline: none; color: #334155;
+  }
+  .cond-value input::placeholder { color: #cbd5e1; }
+
+  /* 删除按钮 */
+  .cond-delete {
+    flex-shrink: 0; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;
+    margin-right: 4px; border-radius: 6px; border: none; background: transparent;
+    color: #94a3b8; cursor: pointer; opacity: 0; transition: all 0.15s;
+  }
+  .cond-item:hover .cond-delete { opacity: 1; }
+  .cond-delete:hover { color: #ef4444 !important; background: #fef2f2 !important; }
+
+  /* ===== 嵌套条件组容器 ===== */
+  .sub-group-wrapper {
+    position: relative; border-radius: 12px;
+    background: linear-gradient(135deg, rgba(248,250,252,0.8) 0%, rgba(241,245,249,0.6) 100%);
+    border: 1px dashed #cbd5e1;
+    padding: 8px 8px 8px 4px;
+  }
+  .sub-group-delete {
+    position: absolute; top: -8px; right: -8px;
+    width: 20px; height: 20px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    background: #fff; border: 1.5px solid #e2e8f0; color: #94a3b8;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08); cursor: pointer;
+    opacity: 0; transition: all 0.15s; font-size: 12px;
+  }
+  .sub-group-wrapper:hover .sub-group-delete { opacity: 1; }
+  .sub-group-delete:hover { border-color: #fca5a5; color: #ef4444; background: #fef2f2; }
+
+  /* ===== 添加按钮行 ===== */
+  .add-row { display: flex; align-items: center; min-height: 34px; }
+  .add-row .faded-line { flex-shrink: 0; width: 24px; height: 2px; border-radius: 1px; }
+  .add-row .faded-line.and { background: rgba(199,210,254,0.53); }
+  .add-row .faded-line.or  { background: rgba(253,230,138,0.53); }
+  .add-buttons { display: flex; align-items: center; gap: 8px; padding: 4px 0; margin-left: 8px; }
+
+  .btn-add-condition {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 12px; font-weight: 500; padding: 6px 12px; border-radius: 8px;
+    color: #6366f1; background: rgba(238,242,255,0.7); border: 1px dashed #c7d2fe;
+    cursor: pointer; transition: all 0.15s;
+  }
+  .btn-add-condition:hover { background: #eef2ff; border-color: #a5b4fc; box-shadow: 0 1px 4px rgba(99,102,241,0.12); }
+
+  .btn-add-group {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 12px; font-weight: 500; padding: 6px 12px; border-radius: 8px;
+    color: #8b5cf6; background: rgba(245,243,255,0.7); border: 1px dashed #ddd6fe;
+    cursor: pointer; transition: all 0.15s;
+  }
+  .btn-add-group:hover { background: #f5f3ff; border-color: #c4b5fd; box-shadow: 0 1px 4px rgba(139,92,246,0.12); }
+
+  /* ===== 空状态 ===== */
+  .empty-state {
+    border-radius: 12px; padding: 32px; text-align: center; font-size: 14px;
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    border: 1px dashed #cbd5e1; color: #94a3b8;
+  }
+  .empty-state .icon { width: 20px; height: 20px; margin: 0 auto 8px; color: #94a3b8; }
+
+  .btn-first-condition {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 12px; font-weight: 500; padding: 8px 16px; border-radius: 8px;
+    color: #6366f1;
+    background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);
+    border: 1px solid #c7d2fe;
+    box-shadow: 0 1px 3px rgba(99,102,241,0.1);
+    cursor: pointer; transition: all 0.2s;
+  }
+
+  /* ===== 辅助 ===== */
+  .section-title { font-size: 14px; font-weight: 600; color: #475569; margin-bottom: 12px; }
+  .section-hint { font-size: 12px; color: #94a3b8; margin-top: 4px; }
+  .demo-section { margin-bottom: 48px; }
+  h1 { font-size: 22px; font-weight: 700; color: #1e293b; margin-bottom: 8px; }
+  h2 { font-size: 16px; font-weight: 600; color: #334155; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid #e2e8f0; }
+  .page-header { margin-bottom: 40px; }
+
+  /* SVG 图标占位 */
+  .icon-plus::before { content: '+'; font-weight: 700; }
+  .icon-x::before { content: '×'; font-weight: 700; }
+  .icon-brackets::before { content: '[ ]'; font-size: 10px; font-weight: 700; }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>条件表达式编辑器 — 前端样式还原</h1>
+  <p style="color:#64748b; font-size:14px;">以下展示了条件表达式组件在不同状态下的 HTML/CSS 静态样式</p>
+</div>
+
+<!-- ============================================================ -->
+<!-- 示例 1：带嵌套条件的完整编辑状态 -->
+<!-- ============================================================ -->
+<div class="demo-section">
+  <h2>1. 编辑模式 — AND 组包含条件 + 嵌套 OR 子组</h2>
+  <div class="section-title">前置条件表达式</div>
+
+  <div class="expr-container">
+    <div class="cond-group">
+      <!-- 左侧 AND 轨道 -->
+      <div class="cond-rail">
+        <div class="rail-line and"></div>
+        <div class="logic-toggle and">
+          <button class="active-and">AND</button>
+          <button class="inactive">OR</button>
+        </div>
+        <div class="rail-line and"></div>
+      </div>
+
+      <!-- 右侧子项 -->
+      <div class="cond-children">
+
+        <!-- 条件 1 -->
+        <div class="cond-row">
+          <div class="branch-connector">
+            <div class="line and"></div>
+            <div class="dot and"></div>
+          </div>
+          <div class="cond-content">
+            <div class="cond-item">
+              <div class="cond-field">
+                <div class="accent-bar"></div>
+                <input type="text" class="mono" value="fact.amount" readonly>
+              </div>
+              <div class="cond-operator">
+                <select>
+                  <option selected>大于</option>
+                </select>
+              </div>
+              <div class="cond-value">
+                <input type="text" value="1000" readonly>
+              </div>
+              <button class="cond-delete"><span class="icon-x"></span></button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 条件 2 -->
+        <div class="cond-row">
+          <div class="branch-connector">
+            <div class="line and"></div>
+            <div class="dot and"></div>
+          </div>
+          <div class="cond-content">
+            <div class="cond-item">
+              <div class="cond-field">
+                <div class="accent-bar"></div>
+                <input type="text" class="mono" value="fact.channel" readonly>
+              </div>
+              <div class="cond-operator">
+                <select>
+                  <option selected>不等于</option>
+                </select>
+              </div>
+              <div class="cond-value">
+                <input type="text" value="internal" readonly>
+              </div>
+              <button class="cond-delete"><span class="icon-x"></span></button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 嵌套 OR 子组 -->
+        <div class="cond-row">
+          <div class="branch-connector">
+            <div class="line and"></div>
+            <div class="dot and"></div>
+          </div>
+          <div class="cond-content">
+            <div class="sub-group-wrapper">
+              <button class="sub-group-delete"><span class="icon-x"></span></button>
+              <div class="cond-group">
+                <!-- OR 轨道 -->
+                <div class="cond-rail">
+                  <div class="rail-line or"></div>
+                  <div class="logic-toggle or">
+                    <button class="inactive">AND</button>
+                    <button class="active-or">OR</button>
+                  </div>
+                  <div class="rail-line or"></div>
+                </div>
+                <div class="cond-children">
+                  <!-- 子条件 1 -->
+                  <div class="cond-row">
+                    <div class="branch-connector">
+                      <div class="line or"></div>
+                      <div class="dot or"></div>
+                    </div>
+                    <div class="cond-content">
+                      <div class="cond-item">
+                        <div class="cond-field">
+                          <div class="accent-bar"></div>
+                          <input type="text" class="mono" value="fact.riskLevel" readonly>
+                        </div>
+                        <div class="cond-operator">
+                          <select><option selected>等于</option></select>
+                        </div>
+                        <div class="cond-value">
+                          <input type="text" value="HIGH" readonly>
+                        </div>
+                        <button class="cond-delete"><span class="icon-x"></span></button>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- 子条件 2 -->
+                  <div class="cond-row">
+                    <div class="branch-connector">
+                      <div class="line or"></div>
+                      <div class="dot or"></div>
+                    </div>
+                    <div class="cond-content">
+                      <div class="cond-item">
+                        <div class="cond-field">
+                          <div class="accent-bar"></div>
+                          <input type="text" class="mono" value="fact.deviceId" readonly>
+                        </div>
+                        <div class="cond-operator">
+                          <select><option selected>为空</option></select>
+                        </div>
+                        <!-- 为空操作符不显示值输入框 -->
+                        <button class="cond-delete"><span class="icon-x"></span></button>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- OR 组的添加按钮 -->
+                  <div class="add-row">
+                    <div class="faded-line or"></div>
+                    <div class="add-buttons">
+                      <button class="btn-add-condition"><span class="icon-plus"></span> 条件</button>
+                      <button class="btn-add-group"><span class="icon-brackets"></span> 条件组</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 条件 3：使用 IN 运算符 -->
+        <div class="cond-row">
+          <div class="branch-connector">
+            <div class="line and"></div>
+            <div class="dot and"></div>
+          </div>
+          <div class="cond-content">
+            <div class="cond-item">
+              <div class="cond-field">
+                <div class="accent-bar"></div>
+                <input type="text" class="mono" value="fact.productType" readonly>
+              </div>
+              <div class="cond-operator">
+                <select><option selected>在列表中</option></select>
+              </div>
+              <div class="cond-value">
+                <input type="text" value="loan,credit,transfer" placeholder="逗号分隔多个值..." readonly>
+              </div>
+              <button class="cond-delete"><span class="icon-x"></span></button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 根组的添加按钮 -->
+        <div class="add-row">
+          <div class="faded-line and"></div>
+          <div class="add-buttons">
+            <button class="btn-add-condition"><span class="icon-plus"></span> 条件</button>
+            <button class="btn-add-group"><span class="icon-brackets"></span> 条件组</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p class="section-hint">满足条件时才会执行特征提取。可使用 fact.* 访问事件字段，context.* 访问全局上下文。</p>
+</div>
+
+<!-- ============================================================ -->
+<!-- 示例 2：只读模式 -->
+<!-- ============================================================ -->
+<div class="demo-section">
+  <h2>2. 只读模式 — AND/OR 徽章不可切换，无操作按钮</h2>
+  <div class="section-title">前置条件表达式</div>
+
+  <div class="expr-container">
+    <div class="cond-group">
+      <div class="cond-rail">
+        <div class="rail-line and"></div>
+        <div class="logic-badge and">AND</div>
+        <div class="rail-line and"></div>
+      </div>
+      <div class="cond-children">
+        <div class="cond-row">
+          <div class="branch-connector">
+            <div class="line and"></div>
+            <div class="dot and"></div>
+          </div>
+          <div class="cond-content">
+            <div class="cond-item" style="pointer-events:none;">
+              <div class="cond-field">
+                <div class="accent-bar"></div>
+                <input type="text" class="mono" value="fact.amount" disabled>
+              </div>
+              <div class="cond-operator">
+                <select disabled><option selected>大于</option></select>
+              </div>
+              <div class="cond-value">
+                <input type="text" value="1000" disabled>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="cond-row">
+          <div class="branch-connector">
+            <div class="line and"></div>
+            <div class="dot and"></div>
+          </div>
+          <div class="cond-content">
+            <div class="cond-item" style="pointer-events:none;">
+              <div class="cond-field">
+                <div class="accent-bar"></div>
+                <input type="text" class="mono" value="fact.userId" disabled>
+              </div>
+              <div class="cond-operator">
+                <select disabled><option selected>不为空</option></select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- 示例 3：空状态（只读） -->
+<!-- ============================================================ -->
+<div class="demo-section">
+  <h2>3. 空状态 — 只读，无条件</h2>
+  <div class="section-title">前置条件表达式</div>
+
+  <div class="empty-state">
+    <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block;margin:0 auto 8px;">
+      <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
+    </svg>
+    <span>无前置条件，始终执行</span>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- 示例 4：空状态（编辑） -->
+<!-- ============================================================ -->
+<div class="demo-section">
+  <h2>4. 空状态 — 编辑模式，提示添加</h2>
+  <div class="section-title">前置条件表达式</div>
+
+  <div class="expr-container" style="min-height:60px;"></div>
+  <div style="text-align:center; padding-top:12px; padding-bottom:4px;">
+    <button class="btn-first-condition"><span class="icon-plus"></span> 添加第一个条件</button>
+    <p class="section-hint" style="margin-top:12px;">未配置条件时，默认始终执行特征提取</p>
+  </div>
+</div>
+
+</body>
+</html>
