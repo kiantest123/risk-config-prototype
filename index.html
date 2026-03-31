@@ -1,30 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>风控配置平台</title>
-    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+    <title>风控配置平台离线预览</title>
+    <script src="./tailwind-cdn.js"></script>
+    <link rel="stylesheet" href="./index.css" />
     <style>
-      /* Custom scrollbar for webkit */
-      ::-webkit-scrollbar {
-        width: 8px;
-        height: 8px;
-      }
-      ::-webkit-scrollbar-track {
-        background: #f1f5f9; 
-      }
-      ::-webkit-scrollbar-thumb {
-        background: #cbd5e1; 
-        border-radius: 4px;
-      }
-      ::-webkit-scrollbar-thumb:hover {
-        background: #94a3b8; 
-      }
+      body { background: #f0f2f5; color: #0f172a; font-family: 'PingFang SC', 'Helvetica Neue', Arial, sans-serif; }
+      #root { min-height: 100vh; }
     </style>
-</head>
-  <body class="bg-slate-50 text-slate-900 antialiased">
+  </head>
+  <body>
     <div id="root"></div>
-  <script type="module" src="/index.tsx"></script>
-</body>
+    <script src="./app.js"></script>
+  </body>
 </html>
