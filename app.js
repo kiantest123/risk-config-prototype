@@ -107,7 +107,7 @@ let aggFields=l?(0,X.jsxs)(X.Fragment,{children:[
 ]}):null;
 let storageFields=s?(0,X.jsxs)(X.Fragment,{children:[
 (0,X.jsxs)("div",{children:[(0,X.jsx)("label",{className:"block text-xs font-medium text-slate-500 mb-1",children:"数值提取路径"}),(0,X.jsx)("input",{type:"text",className:"w-full text-xs border border-slate-300 rounded px-2 py-1.5 font-mono",value:i.valueJsonPath||"",onChange:v=>_uc("valueJsonPath",v.target.value)})]}),
-(0,X.jsxs)("div",{children:[(0,X.jsx)("label",{className:"block text-xs font-medium text-slate-500 mb-1",children:"TTL (秒)"}),(0,X.jsx)("input",{type:"number",className:"w-full text-xs border border-slate-300 rounded px-2 py-1.5",value:i.ttlSeconds||"",onChange:v=>_uc("ttlSeconds",parseInt(v.target.value)||0)})])},isDirStorage?(0,X.jsxs)("div",{children:[(0,X.jsx)("label",{className:"block text-xs font-medium text-slate-500 mb-1",children:"\u5199\u5165\u6a21\u5f0f"}),(0,X.jsx)("select",{className:"w-full text-xs border border-slate-300 rounded px-2 py-1.5 bg-white",value:i.writeMode||"ALWAYS",onChange:v=>_uc("writeMode",v.target.value),children:["ALWAYS","SET_IF_ABSENT","INCREMENT","DECREMENT"].map(v=>(0,X.jsx)("option",{value:v,children:v},v))})]}):null
+(0,X.jsxs)("div",{children:[(0,X.jsx)("label",{className:"block text-xs font-medium text-slate-500 mb-1",children:"TTL (秒)"}),(0,X.jsx)("input",{type:"number",className:"w-full text-xs border border-slate-300 rounded px-2 py-1.5",value:i.ttlSeconds||"",onChange:v=>_uc("ttlSeconds",parseInt(v.target.value)||0)})]}),isDirStorage?(0,X.jsxs)("div",{children:[(0,X.jsx)("label",{className:"block text-xs font-medium text-slate-500 mb-1",children:"\u5199\u5165\u6a21\u5f0f"}),(0,X.jsx)("select",{className:"w-full text-xs border border-slate-300 rounded px-2 py-1.5 bg-white",value:i.writeMode||"ALWAYS",onChange:v=>_uc("writeMode",v.target.value),children:["ALWAYS","SET_IF_ABSENT","INCREMENT","DECREMENT"].map(v=>(0,X.jsx)("option",{value:v,children:v},v))})]}):null
 ]}):null;
 let historyFields=isHistStorage?(0,X.jsxs)(X.Fragment,{children:[
 (0,X.jsxs)("div",{children:[
@@ -134,7 +134,7 @@ i.storageMode==="TIME_WINDOW"?(0,X.jsxs)(X.Fragment,{children:[
 let offlineFields=u?(0,X.jsxs)(X.Fragment,{children:[
 (0,X.jsxs)("div",{children:[(0,X.jsx)("label",{className:"block text-xs font-medium text-slate-500 mb-1",children:"来源表名"}),(0,X.jsx)("input",{type:"text",className:"w-full text-xs border border-slate-300 rounded px-2 py-1.5",value:i.sourceTable||"",onChange:v=>_uc("sourceTable",v.target.value)})]}),
 (0,X.jsxs)("div",{children:[(0,X.jsx)("label",{className:"block text-xs font-medium text-slate-500 mb-1",children:"来源字段"}),(0,X.jsx)("input",{type:"text",className:"w-full text-xs border border-slate-300 rounded px-2 py-1.5 font-mono",value:i.sourceColumn||"",onChange:v=>_uc("sourceColumn",v.target.value)})]}),
-(0,X.jsxs)("div",{children:[(0,X.jsx)("label",{className:"block text-xs font-medium text-slate-500 mb-1",children:"主键列"}),(0,X.jsx)("input",{type:"text",className:"w-full text-xs border border-slate-300 rounded px-2 py-1.5 font-mono",value:i.entityIdColumn||"",onChange:v=>_uc("entityIdColumn",v.target.value)})])}
+(0,X.jsxs)("div",{children:[(0,X.jsx)("label",{className:"block text-xs font-medium text-slate-500 mb-1",children:"主键列"}),(0,X.jsx)("input",{type:"text",className:"w-full text-xs border border-slate-300 rounded px-2 py-1.5 font-mono",value:i.entityIdColumn||"",onChange:v=>_uc("entityIdColumn",v.target.value)})]})
 ,(0,X.jsxs)("div",{children:[(0,X.jsx)("label",{className:"block text-xs font-medium text-slate-500 mb-1",children:"\u65e5\u671f\u5206\u533a\u5217"}),(0,X.jsx)("input",{type:"text",className:"w-full text-xs border border-slate-300 rounded px-2 py-1.5 font-mono",value:i.datePartitionColumn||"",onChange:v=>_uc("datePartitionColumn",v.target.value)})]}),(0,X.jsxs)("div",{children:[(0,X.jsx)("label",{className:"block text-xs font-medium text-slate-500 mb-1",children:"\u5206\u533a\u65e5\u671f\u7b56\u7565"}),(0,X.jsx)("select",{className:"w-full text-xs border border-slate-300 rounded px-2 py-1.5 bg-white",value:i.datePartitionValueStrategy||"YESTERDAY",onChange:v=>_uc("datePartitionValueStrategy",v.target.value),children:["TODAY","YESTERDAY"].map(v=>(0,X.jsx)("option",{value:v,children:v},v))})]}),(0,X.jsxs)("div",{children:[(0,X.jsx)("label",{className:"block text-xs font-medium text-slate-500 mb-1",children:"\u5206\u533a\u65e5\u671f\u683c\u5f0f"}),(0,X.jsx)("select",{className:"w-full text-xs border border-slate-300 rounded px-2 py-1.5 bg-white",value:i.datePartitionFormat||"YYYY_MM_DD",onChange:v=>_uc("datePartitionFormat",v.target.value),children:["YYYY_MM_DD","YYYYMMDD","YYYY_MM","YYYYMM"].map(v=>(0,X.jsx)("option",{value:v,children:v},v))})]}),(0,X.jsxs)("div",{children:[(0,X.jsx)("label",{className:"block text-xs font-medium text-slate-500 mb-1",children:"\u5206\u533a\u56de\u9000\u5929\u6570"}),(0,X.jsx)("input",{type:"number",className:"w-full text-xs border border-slate-300 rounded px-2 py-1.5",value:i.datePartitionFallbackDays||"",onChange:v=>_uc("datePartitionFallbackDays",parseInt(v.target.value)||0)})]}),(0,X.jsxs)("div",{children:[(0,X.jsx)("label",{className:"block text-xs font-medium text-slate-500 mb-1",children:"\u5199\u5165\u6a21\u5f0f"}),(0,X.jsx)("select",{className:"w-full text-xs border border-slate-300 rounded px-2 py-1.5 bg-white",value:i.writeMode||"ALWAYS",onChange:v=>_uc("writeMode",v.target.value),children:["ALWAYS","SET_IF_ABSENT"].map(v=>(0,X.jsx)("option",{value:v,children:v},v))})]})
 ]}):null;
 let statefulFields=isStateful?(0,X.jsxs)(X.Fragment,{children:[
@@ -168,12 +168,11 @@ i.protocol==="http"?(0,X.jsxs)(X.Fragment,{children:[
 (0,X.jsxs)("div",{className:"mb-2",children:[(0,X.jsx)("label",{className:"block text-xs text-slate-500 mb-1",children:"URL"}),(0,X.jsx)("input",{type:"text",className:"w-full text-xs border border-slate-300 rounded px-2 py-1 font-mono bg-white",value:(i.protocolConfig||{}).url||"",onChange:v=>{_uc("protocolConfig",{...i.protocolConfig,url:v.target.value})}})]}),
 (0,X.jsxs)("div",{className:"grid grid-cols-2 gap-2",children:[
 (0,X.jsxs)("div",{children:[(0,X.jsx)("label",{className:"block text-xs text-slate-500 mb-1",children:"HTTP \u65b9\u6cd5"}),(0,X.jsx)("select",{className:"w-full text-xs border border-slate-300 rounded px-2 py-1 bg-white",value:(i.protocolConfig||{}).httpMethod||"POST",onChange:v=>{_uc("protocolConfig",{...i.protocolConfig,httpMethod:v.target.value})},children:["GET","POST"].map(v=>(0,X.jsx)("option",{value:v,children:v},v))})]}),
-(0,X.jsxs)("div",{children:[(0,X.jsx)("label",{className:"block text-xs text-slate-500 mb-1",children:"\u8fde\u63a5\u8d85\u65f6 (ms)"}),(0,X.jsx)("input",{type:"number",className:"w-full text-xs border border-slate-300 rounded px-2 py-1 bg-white",value:(i.protocolConfig||{}).connectTimeoutMs||"",onChange:v=>{_uc("protocolConfig",{...i.protocolConfig,connectTimeoutMs:parseInt(v.target.value)||0})}})])
+(0,X.jsxs)("div",{children:[(0,X.jsx)("label",{className:"block text-xs text-slate-500 mb-1",children:"\u8fde\u63a5\u8d85\u65f6 (ms)"}),(0,X.jsx)("input",{type:"number",className:"w-full text-xs border border-slate-300 rounded px-2 py-1 bg-white",value:(i.protocolConfig||{}).connectTimeoutMs||"",onChange:v=>{_uc("protocolConfig",{...i.protocolConfig,connectTimeoutMs:parseInt(v.target.value)||0})}})]})
 ]})
 ]}):(0,X.jsxs)(X.Fragment,{children:[
 (0,X.jsxs)("div",{className:"mb-2",children:[(0,X.jsx)("label",{className:"block text-xs text-slate-500 mb-1",children:"\u63a5\u53e3\u540d"}),(0,X.jsx)("input",{type:"text",className:"w-full text-xs border border-slate-300 rounded px-2 py-1 font-mono bg-white",value:(i.protocolConfig||{}).interface||"",onChange:v=>{_uc("protocolConfig",{...i.protocolConfig,interface:v.target.value})}})]}),
-(0,X.jsxs)("div",{children:[(0,X.jsx)("label",{className:"block text-xs text-slate-500 mb-1",children:"\u91cd\u8bd5\u6b21\u6570"}),(0,X.jsx)("input",{type:"number",className:"w-full text-xs border border-slate-300 rounded px-2 py-1 bg-white",value:(i.protocolConfig||{}).retries||0,onChange:v=>{_uc("protocolConfig",{...i.protocolConfig,retries:parseInt(v.target.value)||0})}})]})
-]})
+(0,X.jsxs)("div",{children:[(0,X.jsx)("label",{className:"block text-xs text-slate-500 mb-1",children:"\u91cd\u8bd5\u6b21\u6570"}),(0,X.jsx)("input",{type:"number",className:"w-full text-xs border border-slate-300 rounded px-2 py-1 bg-white",value:(i.protocolConfig||{}).retries||0,onChange:v=>{_uc("protocolConfig",{...i.protocolConfig,retries:parseInt(v.target.value)||0})}})]})]})
 ]}),
 (0,X.jsxs)("div",{children:[
 (0,X.jsxs)("div",{className:"flex justify-between items-center mb-1",children:[
@@ -187,7 +186,8 @@ i.protocol==="http"?(0,X.jsxs)(X.Fragment,{children:[
 (0,X.jsx)("td",{className:"px-2 py-1",children:(0,X.jsx)("input",{type:"text",className:"w-full text-xs border border-slate-200 rounded px-1 py-0.5 font-mono",value:_pv,onChange:_ev=>{let _pm={...i.paramMapping,[_pk]:_ev.target.value};_uc("paramMapping",_pm)}})}),
 (0,X.jsx)("td",{className:"px-1",children:(0,X.jsx)("button",{type:"button",onClick:()=>{let _pm={...i.paramMapping};delete _pm[_pk];_uc("paramMapping",_pm)},className:"text-xs text-red-400 hover:text-red-600",children:"\u00d7"})})
 ]},_pi))})
-]})})])},
+]})})
+]}),
 (0,X.jsxs)("div",{children:[
 (0,X.jsxs)("div",{className:"flex justify-between items-center mb-1",children:[
 (0,X.jsx)("label",{className:"block text-xs font-medium text-slate-500",children:"\u5e38\u91cf\u53c2\u6570"}),
@@ -200,7 +200,8 @@ i.protocol==="http"?(0,X.jsxs)(X.Fragment,{children:[
 (0,X.jsx)("td",{className:"px-2 py-1",children:(0,X.jsx)("input",{type:"text",className:"w-full text-xs border border-slate-200 rounded px-1 py-0.5",value:_cv,onChange:_ev=>{let _ct={...i.constants,[_ck]:_ev.target.value};_uc("constants",_ct)}})}),
 (0,X.jsx)("td",{className:"px-1",children:(0,X.jsx)("button",{type:"button",onClick:()=>{let _ct={...i.constants};delete _ct[_ck];_uc("constants",_ct)},className:"text-xs text-red-400 hover:text-red-600",children:"\u00d7"})})
 ]},_ci))})
-]})})])},
+]})})
+]}),
 (0,X.jsxs)("div",{className:"grid grid-cols-2 gap-3",children:[
 (0,X.jsxs)("div",{children:[(0,X.jsx)("label",{className:"block text-xs font-medium text-slate-500 mb-1",children:"\u7ed3\u679c\u63d0\u53d6\u8def\u5f84"}),(0,X.jsx)("input",{type:"text",className:"w-full text-xs border border-slate-300 rounded px-2 py-1.5 font-mono",value:i.resultPath||"",onChange:v=>_uc("resultPath",v.target.value)})]}),
 (0,X.jsxs)("div",{children:[(0,X.jsx)("label",{className:"block text-xs font-medium text-slate-500 mb-1",children:"\u8d85\u65f6 (ms)"}),(0,X.jsx)("input",{type:"number",className:"w-full text-xs border border-slate-300 rounded px-2 py-1.5",value:i.timeoutMs||5000,onChange:v=>_uc("timeoutMs",parseInt(v.target.value)||5000)})]}),
@@ -211,6 +212,7 @@ i.protocol==="http"?(0,X.jsxs)(X.Fragment,{children:[
 (0,X.jsx)("label",{htmlFor:"retryOnError",className:"text-xs text-slate-600 cursor-pointer",children:"\u5f02\u5e38\u65f6\u91cd\u8bd5\u4e00\u6b21 (retryOnError\uff0c\u8d85\u65f6\u4e0d\u91cd\u8bd5)"})
 ]})
 ]}):null;
+
 let paramPanel=(0,X.jsxs)("div",{className:`bg-slate-50 border border-slate-200 rounded-lg p-4${!r?" pointer-events-none opacity-80":""}`,children:[
 (0,X.jsxs)("label",{className:"block text-sm font-semibold text-slate-700 mb-3 flex items-center gap-2",children:[(0,X.jsx)(ei,{className:"w-4 h-4 text-indigo-500"}),"参数配置 (",fe(e.type),")"]}),
 (0,X.jsxs)("div",{className:"space-y-3",children:[aggFields,storageFields,historyFields,offlineFields,statefulFields,externalFields]})
